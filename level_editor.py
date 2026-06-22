@@ -71,7 +71,9 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
             indent += "\t"
 
         #オブジェクト名書き込み
-        self.write_and_print(file,indent+object.type + " - " + object.name)
+        self.write_and_print(file,indent + object.type + " - " + object.name)
+        #ローカルトランスフォーム行列から平行移動、回転、スケーリングを抽出
+        #型はVector,Quaternion,Vector
         trans,rot,scale=object.matrix_local.decompose()
         #回転をQuternionからEuler(3軸での回転角)に変換
         rot=rot.to_euler()
@@ -80,9 +82,9 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         rot.y=math.degrees(rot.y)
         rot.z=math.degrees(rot.z)
         #トランスフォーム情報を表示
-        self.write_and_print(file,indent+"Trans(%f,%f,%f)"%(trans.x,trans.y,trans.z))
-        self.write_and_print(file,indent+"Rot(%f,%f,%f)"%(rot.x,rot.y,rot.z))
-        self.write_and_print(file,indent+"Scale(%f,%f,%f)"%(scale.x,scale.y,scale.z))
+        self.write_and_print(file, indent + "Trans(%f,%f,%f)"%(trans.x,trans.y,trans.z))
+        self.write_and_print(file, indent + "Rot(%f,%f,%f)"%(rot.x,rot.y,rot.z))
+        self.write_and_print(file, indent + "Scale(%f,%f,%f)"%(scale.x,scale.y,scale.z))
         self.write_and_print(file,'')
 
         #子ノードへ進む(深さが1上がる)
@@ -111,22 +113,9 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
                     #シーン直下のオブジェクトをルートノード(深さ０)とし、再起関数で走査
                     self.parse_scene_recursive(file,object,0)
 
-                    print(object.type +  " - " + object.name)
-                    #ローカルトランスフォーム行列から平行移動、回転、スケーリングを抽出
-                    #型はVector,Quaternion,Vector
-                    trans,rot,scale=object.matrix_local.decompose()
-                    #回転をQuternionからEuler(3軸での回転角)に変換
-                    rot=rot.to_euler()
-                    #ラジアンから度数法に変換
-                    rot.x=math.degrees(rot.x)
-                    rot.y=math.degrees(rot.y)
-                    rot.z=math.degrees(rot.z)
-                    #トランスフォーム情報を表示
-                    self.write_and_print(file,"Trans(%f,%f,%f)" % (trans.x,trans.y,trans.z))
-                    self.write_and_print(file,"Rot(%f,%f,%f)" % (rot.x,rot.y,rot.z))
-                    self.write_and_print(file,"Scale(%f,%f,%f)" % (scale.x,scale.y,scale.z))
 
     def execute(self,context):
+
         print("シーン情報をExportします")
         
         #ファイルに出力
