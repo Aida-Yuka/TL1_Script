@@ -77,8 +77,8 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         rot=rot.to_euler()
         #ラジアンから度数法に変換
         rot.x=math.degrees(rot.x)
-        rot.y=math.degrees(rot.x)
-        rot.z=math.degrees(rot.x)
+        rot.y=math.degrees(rot.y)
+        rot.z=math.degrees(rot.z)
         #トランスフォーム情報を表示
         self.write_and_print(file,indent+"Trans(%f,%f,%f)"%(trans.x,trans.y,trans.z))
         self.write_and_print(file,indent+"Rot(%f,%f,%f)"%(rot.x,rot.y,rot.z))
